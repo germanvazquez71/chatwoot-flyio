@@ -10,6 +10,8 @@ COPY Gemfile* ./
 RUN bundle install
 
 COPY . .
+# Instala Yarn de forma oficial
+RUN corepack enable && corepack prepare yarn@3.6.4 --activate
 
 RUN yarn install
 RUN bundle exec rake assets:precompile
