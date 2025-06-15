@@ -1,10 +1,12 @@
 FROM ruby:3.2
 
 # Instala dependencias del sistema
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs curl postgresql-client
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev curl gnupg2 nodejs postgresql-client
 
-# Habilita Corepack y prepara Yarn 1.22.22 (compatible con Chatwoot)
-RUN corepack enable && corepack prepare yarn@1.22.22 --activate
+# Instala Yarn 1.x manualmente (sin corepack)
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update -qq && apt-get install -y yarn
 
 # Prepara directorio de la app
 RUN mkdir /app
