@@ -11,8 +11,8 @@ RUN bundle install
 
 COPY . .
 # Instala Yarn de forma oficial
-# Instalar Yarn manualmente (versión clásica v1.x)
-RUN npm install -g yarn
+RUN npm install -g yarn@3.6.4
+
 
 RUN yarn install
 RUN bundle exec rake assets:precompile
