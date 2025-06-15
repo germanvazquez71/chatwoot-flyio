@@ -1,0 +1,15 @@
+app = "chatwoot-flyio"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  RAILS_ENV = "production"
+  NODE_ENV = "production"
+
+[experimental]
+  auto_rollback = true
