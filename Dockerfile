@@ -1,20 +1,32 @@
 FROM ruby:3.2
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn postgresql-client
-RUN gem install bundler -v 2.5.16
+# Instalar dependencias del sistema
+RUN apt-get update -qq && apt-get install -y \
+    build-essential libpq-dev postgresql-client curl gnupg
 
+# Instalar Node.js + npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Instalar Yarn
+RUN npm install -g yarn
+
+# Crear y entrar al directorio de la app
 RUN mkdir /app
 WORKDIR /app
 
+# Instalar gemas
 COPY Gemfile* ./
 RUN bundle install
 
+# Copiar el resto del código
 COPY . .
-# Instala Yarn de forma oficial
-RUN npm install -g yarn@3.6.4
 
-
+# Instalar paquetes JS
 RUN yarn install
+
+# Precompilar assets
 RUN bundle exec rake assets:precompile
 
+# Iniciar servidor
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
