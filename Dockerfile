@@ -1,32 +1,25 @@
 FROM ruby:3.2
 
-# Instalar dependencias del sistema
-RUN apt-get update -qq && apt-get install -y \
-    build-essential libpq-dev postgresql-client curl gnupg
+# Instala dependencias del sistema
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs curl postgresql-client
 
-# Instalar Node.js + npm
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs
+# Habilita Corepack y prepara Yarn 1.22.22 (compatible con Chatwoot)
+RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 
-# Instalar Yarn
-RUN npm install -g yarn@1.22.22
-
-# Crear y entrar al directorio de la app
+# Prepara directorio de la app
 RUN mkdir /app
 WORKDIR /app
 
-# Instalar gemas
+# Copia Gemfile y Gemfile.lock para instalar gems
 COPY Gemfile* ./
 RUN bundle install
 
-# Copiar el resto del código
+# Copia el resto de los archivos
 COPY . .
 
-# Instalar paquetes JS
+# Instala paquetes JS con Yarn y compila assets
 RUN yarn install
-
-# Precompilar assets
 RUN bundle exec rake assets:precompile
 
-# Iniciar servidor
+# Comando para ejecutar Puma
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
