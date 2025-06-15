@@ -143,9 +143,10 @@
     "vitest": "3.0.5"
   },
   "engines": {
-    "node": "23.x",
-    "pnpm": "10.x"
-  },
+  "node": ">=20",
+  "pnpm": ">=9.0.0"
+},
+"packageManager": "yarn@pnpm@10.2.0"
   "husky": {
     "hooks": {
       "pre-push": "sh bin/validate_push"
