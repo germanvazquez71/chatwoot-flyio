@@ -9,7 +9,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
 # Instalar Yarn
-RUN npm install -g yarn
+RUN npm install -g yarn@1.22.22
 
 # Crear y entrar al directorio de la app
 RUN mkdir /app
